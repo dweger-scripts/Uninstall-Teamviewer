@@ -39,7 +39,8 @@ function Log-Output {
 
 function Audit-TV {
 		$global:tvVersion = ((get-itemproperty 'C:\Program Files\TeamViewer\TeamViewer.exe' -ErrorAction SilentlyContinue).VersionInfo).ProductVersion
-		if ($tvVersion){Log-Output "Teamviewer version: ${tvVersion}"}
+		if(!$global:tvVersion){$global:tvVersion = ((get-itemproperty 'C:\Program Files (x86)\TeamViewer\TeamViewer.exe' -ErrorAction SilentlyContinue).VersionInfo).ProductVersion}
+		if ($global:tvVersion){Log-Output "Teamviewer version: ${tvVersion}"}
 			else { Log-Output "Teamviewer is not installed" }
 }
 
