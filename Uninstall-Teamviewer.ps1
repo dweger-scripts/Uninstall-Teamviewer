@@ -83,3 +83,4 @@ if ($Uninstall){
     Audit-TV
     if ($global:tvVersion){Uninstall-TV}   
    }
+if (!$Audit -And !$Uninstall){Log-Output 'No Action taken. Please enter a switch. Either -Audit or -Uninstall.'}
