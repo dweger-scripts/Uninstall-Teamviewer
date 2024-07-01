@@ -4,7 +4,7 @@ Uninstalls Teamviewer for Windows computers.
   ## Usage
 This script will need admin privileges. IF deploying from your RMM, make sure it runs in admin or SYSTEM context.
 
-The script requires 1 of 2 parameters/switches to run.
+The script requires 1 of 2 parameters/switches to run. The script will do nothing if you don't submit a parameter/switch.
   ### -Audit
 `.\Uninstall-Teamviewer.ps1 -Audit `
   *This will just audit the machine for the existence of Teamviewer and output the version number.*
@@ -30,6 +30,14 @@ Great for RMMs that only let you bring back the last returned output.
 `C:\temp\Uninstall-Teamviewer.ps1 -Uninstall; $Logs = get-item C:\temp\TeamViewerUninstallLog* ; Get-content $Logs[-1] -Tail 1`
 
 *This will run the script in Uninstall mode, then pull the last line of the newest log file (which should show the success or failure of the uninstall process.*
+
+## Kaseya VSA Procedure
+
+Use the xml file to import a pre-built Kaseya procedure to run this script.
+
+You will be prompted for the switch when you run the procedure.
+
+The procedure will output the last line of the log file to a custom column named "Procedure Output". If you do not have this you will either need to create it or change the column that gets updated.
 
 ## Logging
 This script will create a log file in C:\temp\ folder. The log file will have the date and time in the name.
