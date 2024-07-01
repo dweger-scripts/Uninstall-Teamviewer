@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ScExport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.kaseya.com/vsa/2008/12/Scripting">
+  <Procedure name="Uninstall - Teamviewer" treePres="3" id="000000001" treeFullPath="General Procedures.Software Installs">
+    <Body description="This will either audit or uninstall Teamviewer.&#xA;Use -Audit or -Uninstall when prompted.&#xA;Make sure to include the dash.">
+      <Statement name="GetVariable" continueOnFail="false">
+        <Parameter xsi:type="EnumParameter" name="VariableType" value="Prompt" />
+        <Parameter xsi:type="StringParameter" name="SourceContent" value="" />
+        <Parameter xsi:type="StringParameter" name="VariableName" value="switch" />
+      </Statement>
+      <Statement name="Execute Powershell Command (64-bit, Run As System)" continueOnFail="false">
+        <Parameter xsi:type="StringParameter" name="Parameter1" value="" />
+        <Parameter xsi:type="StringParameter" name="Parameter2" value="$downloadURI = 'https://github.com/dweger-scripts/Uninstall-Teamviewer/raw/main/Uninstall-Teamviewer.ps1'; $script = 'C:\temp\Uninstall-TeamViewer.ps1'; Invoke-WebRequest -URI $downloadURI -Outfile $script " />
+        <Parameter xsi:type="StringParameter" name="Parameter3" value="False" />
+      </Statement>
+      <If description="">
+        <Condition name="TestFile">
+          <Parameter xsi:type="StringParameter" name="Path" value="C:\temp\Uninstall-Teamviewer.ps1" />
+          <Parameter xsi:type="EnumParameter" name="Condition" value="Exists" />
+          <Parameter xsi:type="StringParameter" name="Value" value="" />
+        </Condition>
+        <Then>
+          <Statement name="Execute Powershell Command (64-bit, Run As System)" continueOnFail="false">
+            <Parameter xsi:type="StringParameter" name="Parameter1" value="C:\temp\Uninstall-Teamviewer.ps1" />
+            <Parameter xsi:type="StringParameter" name="Parameter2" value="#switch#" />
+            <Parameter xsi:type="StringParameter" name="Parameter3" value="True" />
+          </Statement>
+          <Statement name="WriteScriptLogEntry" continueOnFail="false">
+            <Parameter xsi:type="StringParameter" name="Comment" value="#global:psresult#" />
+          </Statement>
+          <Statement name="Execute Powershell Command (64-bit, Run As System)" continueOnFail="false">
+            <Parameter xsi:type="StringParameter" name="Parameter1" value="" />
+            <Parameter xsi:type="StringParameter" name="Parameter2" value="$Logs = get-item C:\temp\TeamViewerUninstallLog* ; Get-content $Logs[-1] -Tail 1" />
+            <Parameter xsi:type="StringParameter" name="Parameter3" value="True" />
+          </Statement>
+          <Statement name="WriteScriptLogEntry" continueOnFail="false">
+            <Parameter xsi:type="StringParameter" name="Comment" value="#global:psresult#" />
+          </Statement>
+          <Statement name="UpdateSystemInfo" continueOnFail="false">
+            <Parameter xsi:type="StringParameter" name="ColumnName" value="Procedure Output" />
+            <Parameter xsi:type="StringParameter" name="Value" value="#global:psresult#" />
+          </Statement>
+        </Then>
+      </If>
+    </Body>
+  </Procedure>
+</ScExport>
